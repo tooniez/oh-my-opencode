@@ -319,7 +319,7 @@ export function generateOmoConfig(installConfig: InstallConfig): Record<string, 
     }
   }
 
-  agents["librarian"] = { model: "opencode/glm-4.7-free" }
+  agents["librarian"] = { model: "openrouter/google/gemini-2.0-flash-exp:free" }
 
   // Gemini models use `antigravity-` prefix for explicit Antigravity quota routing
   // @see ANTIGRAVITY_PROVIDER_CONFIG comments for rationale
@@ -330,7 +330,7 @@ export function generateOmoConfig(installConfig: InstallConfig): Record<string, 
   } else if (installConfig.hasCopilot) {
     agents["explore"] = { model: "github-copilot/grok-code-fast-1" }
   } else {
-    agents["explore"] = { model: "opencode/glm-4.7-free" }
+    agents["explore"] = { model: "openrouter/xiaomi/mimo-v2-flash:free" }
   }
 
   if (!installConfig.hasChatGPT) {
@@ -338,7 +338,7 @@ export function generateOmoConfig(installConfig: InstallConfig): Record<string, 
       ? "github-copilot/gpt-5.2"
       : installConfig.hasClaude
         ? "anthropic/claude-opus-4-5"
-        : "opencode/glm-4.7-free"
+        : "openrouter/deepseek/deepseek-r1-0528:free"
     agents["oracle"] = { model: oracleFallback }
   }
 
@@ -355,9 +355,9 @@ export function generateOmoConfig(installConfig: InstallConfig): Record<string, 
     agents["document-writer"] = { model: "github-copilot/gemini-3-flash-preview" }
     agents["multimodal-looker"] = { model: "github-copilot/gemini-3-flash-preview" }
   } else {
-    agents["frontend-ui-ux-engineer"] = { model: "opencode/glm-4.7-free" }
-    agents["document-writer"] = { model: "opencode/glm-4.7-free" }
-    agents["multimodal-looker"] = { model: "opencode/glm-4.7-free" }
+    agents["frontend-ui-ux-engineer"] = { model: "openrouter/google/gemini-2.0-flash-exp:free" }
+    agents["document-writer"] = { model: "openrouter/google/gemini-2.0-flash-exp:free" }
+    agents["multimodal-looker"] = { model: "openrouter/google/gemini-2.0-flash-exp:free" }
   }
 
   if (Object.keys(agents).length > 0) {

@@ -278,7 +278,7 @@ const metisRestrictions = createAgentToolRestrictions([
   "delegate_task",
 ])
 
-const DEFAULT_MODEL = "anthropic/claude-opus-4-5"
+const DEFAULT_MODEL = "openrouter/deepseek/deepseek-r1-0528:free"
 
 export function createMetisAgent(model: string = DEFAULT_MODEL): AgentConfig {
   return {

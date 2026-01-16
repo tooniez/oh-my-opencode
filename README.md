@@ -408,11 +408,81 @@ opencode auth login
 
 **Multi-Account Load Balancing**: The plugin supports up to 10 Google accounts. When one account hits rate limits, it automatically switches to the next available account.
 
+#### OpenRouter (Free/Preview Models)
+
+OpenRouter provides access to free and preview models from multiple providers, offering cost-effective alternatives to paid subscriptions. Several agents are configured to use OpenRouter free models by default.
+
+**Default OpenRouter Models:**
+
+| Agent      | Default Model                                          | Description                                    |
+| ---------- | ------------------------------------------------------ | ---------------------------------------------- |
+| **Oracle** | `openrouter/deepseek/deepseek-r1-0528:free`   | DeepSeek R1, best reasoning model          |
+| **Librarian** | `openrouter/google/gemini-2.0-flash-exp:free`        | Gemini 2.0 Flash, 1M context window |
+| **Explore** | `openrouter/xiaomi/mimo-v2-flash:free`                | MiMo-V2-Flash, #1 open model on SWE-Bench                     |
+
+**Priority**: Native providers (Claude/ChatGPT/Gemini) > GitHub Copilot > OpenRouter free models
+
+##### Setup
+
+1. **Get an OpenRouter API Key:**
+   - Sign up at [OpenRouter.ai](https://openrouter.ai/)
+   - Navigate to [Keys](https://openrouter.ai/keys) to create an API key
+   - Copy your API key
+
+2. **Configure OpenRouter in OpenCode:**
+
+   Add the OpenRouter provider to your `opencode.json`:
+
+   ```json
+   {
+     "provider": {
+       "openrouter": {
+         "apiKey": "sk-or-v1-...",
+         "baseURL": "https://openrouter.ai/api/v1"
+       }
+     }
+   }
+   ```
+
+   Or set the `OPENROUTER_API_KEY` environment variable:
+
+   ```bash
+   export OPENROUTER_API_KEY="sk-or-v1-..."
+   ```
+
+3. **Verify Configuration:**
+
+   The default agent models will automatically use OpenRouter free models when no other providers are configured. You can override specific agents in `oh-my-opencode.json`:
+
+   ```json
+   {
+     "agents": {
+       "oracle": {
+         "model": "openrouter/meta-llama/llama-3.1-405b-instruct:free"
+       },
+       "librarian": {
+         "model": "openrouter/meta-llama/llama-3.3-70b-instruct:free"
+       }
+     }
+   }
+   ```
+
+**Available Free Models:**
+
+- `openrouter/meta-llama/llama-3.3-70b-instruct:free` - Strong general-purpose reasoning
+- `openrouter/meta-llama/llama-3.1-405b-instruct:free` - Massive model for complex tasks
+- `openrouter/google/gemini-2.0-flash-exp:free` - 1M context, multimodal
+- `openrouter/xiaomi/mimo-v2-flash:free` - Coding-optimized MoE model
+- `openrouter/mistralai/devstral-2512:free` - Mistral's code-tuned model
+- `openrouter/nvidia/nemotron-3-nano-30b-a3b:free` - Large-capacity agent model
+
+See [OpenRouter Models](https://openrouter.ai/models) for the full list of available free and preview models.
+
 #### GitHub Copilot (Fallback Provider)
 
 GitHub Copilot is supported as a **fallback provider** when native providers (Claude, ChatGPT, Gemini) are unavailable. The installer configures Copilot with lower priority than native providers.
 
-**Priority**: Native providers (Claude/ChatGPT/Gemini) > GitHub Copilot > Free models
+**Priority**: Native providers (Claude/ChatGPT/Gemini) > GitHub Copilot > OpenRouter free models
 
 ##### Model Mappings
 
@@ -422,8 +492,8 @@ When GitHub Copilot is enabled, oh-my-opencode uses these model assignments:
 | ------------- | -------------------------------- |
 | **Sisyphus**  | `github-copilot/claude-opus-4.5` |
 | **Oracle**    | `github-copilot/gpt-5.2`         |
-| **Explore**   | `grok code` (default)            |
-| **Librarian** | `glm 4.7 free` (default)         |
+| **Explore**   | `openrouter/xiaomi/mimo-v2-flash:free` (default) |
+| **Librarian** | `openrouter/google/gemini-2.0-flash-exp:free` (default) |
 
 GitHub Copilot acts as a proxy provider, routing requests to underlying models based on your subscription.
 
@@ -532,9 +602,17 @@ To remove oh-my-opencode:
 ### Agents: Your Teammates
 
 - **Sisyphus** (`anthropic/claude-opus-4-5`): **The default agent.** A powerful AI orchestrator for OpenCode. Plans, delegates, and executes complex tasks using specialized subagents with aggressive parallel execution. Emphasizes background task delegation and todo-driven workflow. Uses Claude Opus 4.5 with extended thinking (32k budget) for maximum reasoning capability.
-- **oracle** (`openai/gpt-5.2`): Architecture, code review, strategy. Uses GPT-5.2 for its stellar logical reasoning and deep analysis. Inspired by AmpCode.
-- **librarian** (`opencode/glm-4.7-free`): Multi-repo analysis, doc lookup, implementation examples. Uses GLM-4.7 Free for deep codebase understanding and GitHub research with evidence-based answers. Inspired by AmpCode.
-- **explore** (`opencode/grok-code`, `google/gemini-3-flash`, or `anthropic/claude-haiku-4-5`): Fast codebase exploration and pattern matching. Uses Gemini 3 Flash when Antigravity auth is configured, Haiku when Claude max20 is available, otherwise Grok. Inspired by Claude Code.
+- **Sisyphus** (`openrouter/deepseek/deepseek-v3:free`): Primary orchestrator. Uses OpenRouter's free DeepSeek V3 (most popular OSS model, ~14.37T tokens) for complex orchestration tasks. Can be overridden to `anthropic/claude-opus-4-5` for paid subscriptions.
+- **oracle** (`openrouter/deepseek/deepseek-r1-0528:free`): Architecture, code review, strategy. Uses OpenRouter's free DeepSeek R1 for best reasoning capabilities. Can be overridden to `openai/gpt-5.2` for paid subscriptions. Inspired by AmpCode.
+- **librarian** (`openrouter/google/gemini-2.0-flash-exp:free`): Multi-repo analysis, doc lookup, implementation examples. Uses OpenRouter's free Gemini 2.0 Flash with 1M context window for deep codebase understanding and GitHub research with evidence-based answers. Inspired by AmpCode.
+- **explore** (`openrouter/xiaomi/mimo-v2-flash:free`, `google/gemini-3-flash`, or `anthropic/claude-haiku-4-5`): Fast codebase exploration and pattern matching. Uses OpenRouter's free MiMo-V2-Flash by default (#1 open model on SWE-Bench, 256K context), or Gemini 3 Flash when Antigravity auth is configured, Haiku when Claude max20 is available. Inspired by Claude Code.
+- **frontend-ui-ux-engineer** (`openrouter/google/gemini-2.0-flash-exp:free`): UI/UX generation. Uses OpenRouter's free Gemini 2.0 Flash with multimodal support for visual design tasks. Can be overridden to `google/gemini-3-pro-preview` for paid subscriptions.
+- **document-writer** (`openrouter/google/gemini-2.0-flash-exp:free`): Technical writing. Uses OpenRouter's free Gemini 2.0 Flash with 1M context window for comprehensive documentation. Can be overridden to `google/gemini-3-pro-preview` for paid subscriptions.
+- **multimodal-looker** (`openrouter/google/gemini-2.0-flash-exp:free`): PDF/image analysis. Uses OpenRouter's free Gemini 2.0 Flash with 1M context and multimodal vision-language capabilities. Can be overridden to `google/gemini-3-flash` for paid subscriptions.
+- **Prometheus (Planner)** (`openrouter/deepseek/deepseek-r1-0528:free`): Strategic planning agent. Uses OpenRouter's free DeepSeek R1 for interview mode and orchestrating Metis/Momus. Can be overridden to `anthropic/claude-opus-4-5` for paid subscriptions.
+- **Metis (Plan Consultant)** (`openrouter/deepseek/deepseek-r1-0528:free`): Pre-planning analysis. Uses OpenRouter's free DeepSeek R1 for identifying hidden requirements and AI failure points. Can be overridden to `anthropic/claude-sonnet-4-5` for paid subscriptions.
+- **Momus (Plan Reviewer)** (`openrouter/deepseek/deepseek-r1-0528:free`): Plan validation. Uses OpenRouter's free DeepSeek R1 for reviewing work plans with critical analysis. Can be overridden to `openai/gpt-5.2` or `anthropic/claude-sonnet-4-5` for paid subscriptions.
+- **orchestrator-sisyphus** (`openrouter/deepseek/deepseek-v3:free`): Orchestrates work via delegate_task() to complete ALL tasks in a todo list. Uses OpenRouter's free DeepSeek V3. Can be overridden to `anthropic/claude-sonnet-4-5` for paid subscriptions.
 - **frontend-ui-ux-engineer** (`google/gemini-3-pro-preview`): A designer turned developer. Builds gorgeous UIs. Gemini excels at creative, beautiful UI code.
 - **document-writer** (`google/gemini-3-flash`): Technical writing expert. Gemini is a wordsmith—writes prose that flows.
 - **multimodal-looker** (`google/gemini-3-flash`): Visual content specialist. Analyzes PDFs, images, diagrams to extract information.
@@ -834,10 +912,10 @@ When both `oh-my-opencode.jsonc` and `oh-my-opencode.json` files exist, `.jsonc`
   /* Agent overrides - customize models for specific tasks */
   "agents": {
     "oracle": {
-      "model": "openai/gpt-5.2"  // GPT for strategic reasoning
+      "model": "openrouter/deepseek/deepseek-r1-0528:free"  // DeepSeek R1 for best reasoning
     },
     "explore": {
-      "model": "opencode/grok-code"  // Free & fast for exploration
+      "model": "openrouter/xiaomi/mimo-v2-flash:free"  // MiMo-V2-Flash, #1 open model on SWE-Bench
     },
   },
 }
@@ -1068,7 +1146,9 @@ Categories enable domain-specific task delegation via the `delegate_task` tool. 
 | Category         | Model                         | Description                                                                  |
 | ---------------- | ----------------------------- | ---------------------------------------------------------------------------- |
 | `visual`         | `google/gemini-3-pro-preview` | Frontend, UI/UX, design-focused tasks. High creativity (temp 0.7).           |
-| `business-logic` | `openai/gpt-5.2`              | Backend logic, architecture, strategic reasoning. Low creativity (temp 0.1). |
+| `business-logic` | `openrouter/deepseek/deepseek-r1-0528:free` | Backend logic, architecture, strategic reasoning. Low creativity (temp 0.1). DeepSeek R1 for best reasoning. Can override to `openai/gpt-5.2` for paid subscriptions. |
+| `visual-engineering` | `openrouter/google/gemini-2.0-flash-exp:free` | Frontend, UI/UX, design-focused tasks. Gemini 2.0 Flash with multimodal support. Can override to `google/gemini-3-pro-preview` for paid subscriptions. |
+| `writing` | `openrouter/google/gemini-2.0-flash-exp:free` | Technical writing, documentation. Gemini 2.0 Flash with 1M context. Can override to `google/gemini-3-flash-preview` for paid subscriptions. |
 
 **Usage:**
 

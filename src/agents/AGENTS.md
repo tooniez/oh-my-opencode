@@ -29,15 +29,17 @@ agents/
 ## AGENT MODELS
 | Agent | Default Model | Purpose |
 |-------|---------------|---------|
-| Sisyphus | anthropic/claude-opus-4-5 | Primary orchestrator. 32k extended thinking budget. |
-| oracle | openai/gpt-5.2 | High-IQ debugging, architecture, strategic consultation. |
-| librarian | opencode/glm-4.7-free | Multi-repo analysis, docs research, GitHub examples. |
-| explore | opencode/grok-code | Fast contextual grep. Fallbacks: Gemini-3-Flash, Haiku-4-5. |
-| frontend-ui-ux | google/gemini-3-pro-preview | Production-grade UI/UX generation and styling. |
-| document-writer | google/gemini-3-pro-preview | Technical writing, guides, API documentation. |
-| Prometheus | anthropic/claude-opus-4-5 | Strategic planner. Interview mode, orchestrates Metis/Momus. |
-| Metis | anthropic/claude-sonnet-4-5 | Plan Consultant. Pre-planning risk/requirement analysis. |
-| Momus | anthropic/claude-sonnet-4-5 | Plan Reviewer. Validation and quality enforcement. |
+| Sisyphus | openrouter/deepseek/deepseek-v3:free | Primary orchestrator. DeepSeek V3 for complex orchestration tasks. |
+| oracle | openrouter/deepseek/deepseek-r1-0528:free | High-IQ debugging, architecture, strategic consultation. DeepSeek R1 for best reasoning. |
+| librarian | openrouter/google/gemini-2.0-flash-exp:free | Multi-repo analysis, docs research, GitHub examples. Gemini 2.0 Flash with 1M context window. |
+| explore | openrouter/xiaomi/mimo-v2-flash:free | Fast contextual grep. MiMo-V2-Flash (#1 open model on SWE-Bench) for coding tasks. |
+| frontend-ui-ux | openrouter/google/gemini-2.0-flash-exp:free | Production-grade UI/UX generation and styling. Gemini 2.0 Flash with multimodal support. |
+| document-writer | openrouter/google/gemini-2.0-flash-exp:free | Technical writing, guides, API documentation. Gemini 2.0 Flash with 1M context. |
+| multimodal-looker | openrouter/google/gemini-2.0-flash-exp:free | PDF/image analysis. Gemini 2.0 Flash with 1M context and multimodal vision-language capabilities. |
+| Prometheus | openrouter/deepseek/deepseek-r1-0528:free | Strategic planner. Interview mode, orchestrates Metis/Momus. DeepSeek R1 for reasoning. |
+| Metis | openrouter/deepseek/deepseek-r1-0528:free | Plan Consultant. Pre-planning risk/requirement analysis. DeepSeek R1 for reasoning. |
+| Momus | openrouter/deepseek/deepseek-r1-0528:free | Plan Reviewer. Validation and quality enforcement. DeepSeek R1 for reasoning. |
+| orchestrator-sisyphus | openrouter/deepseek/deepseek-v3:free | Orchestrates work via delegate_task() to complete ALL tasks in a todo list. DeepSeek V3 for general purpose. |
 
 ## HOW TO ADD AN AGENT
 1. Create `src/agents/my-agent.ts` exporting `AgentConfig`.

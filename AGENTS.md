@@ -120,10 +120,17 @@ oh-my-opencode/
 
 | Agent | Default Model | Purpose |
 |-------|---------------|---------|
-| Sisyphus | anthropic/claude-opus-4-5 | Primary orchestrator with extended thinking |
-| oracle | openai/gpt-5.2 | Read-only consultation. High-IQ debugging, architecture |
-| librarian | opencode/glm-4.7-free | Multi-repo analysis, docs |
-| explore | opencode/grok-code | Fast codebase exploration |
+| Sisyphus | openrouter/deepseek/deepseek-v3:free | Primary orchestrator. DeepSeek V3 for complex orchestration |
+| oracle | openrouter/deepseek/deepseek-r1-0528:free | Read-only consultation. High-IQ debugging, architecture. DeepSeek R1 for best reasoning |
+| librarian | openrouter/google/gemini-2.0-flash-exp:free | Multi-repo analysis, docs. Gemini 2.0 Flash with 1M context |
+| explore | openrouter/xiaomi/mimo-v2-flash:free | Fast codebase exploration. MiMo-V2-Flash (#1 on SWE-Bench) |
+| frontend-ui-ux-engineer | openrouter/google/gemini-2.0-flash-exp:free | UI generation. Gemini 2.0 Flash with multimodal support |
+| document-writer | openrouter/google/gemini-2.0-flash-exp:free | Technical docs. Gemini 2.0 Flash with 1M context |
+| multimodal-looker | openrouter/google/gemini-2.0-flash-exp:free | PDF/image analysis. Gemini 2.0 Flash with 1M context and multimodal |
+| Prometheus (Planner) | openrouter/deepseek/deepseek-r1-0528:free | Strategic planning, interview-driven. DeepSeek R1 for reasoning |
+| Metis (Plan Consultant) | openrouter/deepseek/deepseek-r1-0528:free | Pre-planning analysis. DeepSeek R1 for reasoning |
+| Momus (Plan Reviewer) | openrouter/deepseek/deepseek-r1-0528:free | Plan validation. DeepSeek R1 for reasoning |
+| orchestrator-sisyphus | openrouter/deepseek/deepseek-v3:free | Orchestrates work via delegate_task(). DeepSeek V3 for general purpose |
 | frontend-ui-ux-engineer | google/gemini-3-pro-preview | UI generation |
 | document-writer | google/gemini-3-pro-preview | Technical docs |
 | multimodal-looker | google/gemini-3-flash | PDF/image analysis |

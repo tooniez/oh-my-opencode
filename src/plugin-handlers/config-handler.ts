@@ -205,7 +205,7 @@ export function createConfigHandler(deps: ConfigHandlerDeps) {
             prometheusOverride?.model ??
             categoryConfig?.model ??
             defaultModel ??
-            "anthropic/claude-opus-4-5",
+            "openrouter/deepseek/deepseek-r1-0528:free",
           mode: "primary" as const,
           prompt: PROMETHEUS_SYSTEM_PROMPT,
           permission: PROMETHEUS_PERMISSION,
